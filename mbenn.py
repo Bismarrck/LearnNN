@@ -224,7 +224,8 @@ def remove_duplicates(coords, energies, threshold=0.99, verbose=True):
   """
   Remove duplicated structures. The similarity algorithm used here is USR.
 
-  This function may take extremely long time, so wait and hope.
+  This implementation now takes about 15 minutes on my MacBook Pro using one
+  core. The speed is acceptable.
   """
   if verbose:
     print("Remove duplicated data samples ...\n")
@@ -263,8 +264,9 @@ def remove_duplicates(coords, energies, threshold=0.99, verbose=True):
       if not keep[i]:
         continue
       sij = 1.0 / (1.0 + np.sum(np.abs(v[i] - v[i + 1:, ...]), axis=1))
-      duplicates = np.where(sij > threshold)[0] + i
-      keep[duplicates] = False
+      duplicates = np.where(sij > threshold)[0]
+      if len(duplicates) > 0:
+        keep[duplicates + i] = False
       if verbose and i % 1000 == 0:
         print("Progress: %7d  /  %7d" % (i, n))
     indices = np.where(keep == False)[0]
