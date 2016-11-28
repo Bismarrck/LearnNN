@@ -260,7 +260,7 @@ def remove_duplicates(coords, energies, threshold=0.995, verbose=True):
     for i in xrange(n):
       if not keep[i]:
         continue
-      sij = 1.0 / (1.0 + np.sum(np.abs(v[i] - v[i + 1:, ...]), axis=1))
+      sij = 1.0 / (1.0 + np.sum(np.abs(v[i] - v[i + 1:, ...]), axis=1) / 12.0)
       duplicates = np.where(sij > threshold)[0]
       if len(duplicates) > 0:
         keep[duplicates + i] = False
