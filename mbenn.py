@@ -34,23 +34,20 @@ FLAGS = None
 # The patch size is always 1.
 PATCH_SIZE = 1
 
-# The main datafile.
+# The main file.
 HDF5_DATABASE_FILE = "b20pbe.hdf5"
-
-# The npz file to save similarity-related data.
-XYZ_USR_FILE = "b20pbe.npz"
 
 # Each B20 cluster has twenty Boron atoms.
 NUM_SITES = 20
 
 # The total number of structures in the CP2K/XYZ file is 209660.
 XYZ_FILE = "b20pbe.xyz"
-TOTAL_SIZE = 209660
+TOTAL_SIZE = 100
 
 # My poor MacBookPro ...
-TEST_SIZE = 10000
-VALID_SIZE = 10000
-TRAIN_SIZE = 80000
+TEST_SIZE = 10
+VALID_SIZE = 10
+TRAIN_SIZE = 60
 LOAD_SIZE = TEST_SIZE + VALID_SIZE + TRAIN_SIZE
 
 # The seed is my room number.
@@ -220,7 +217,7 @@ def get_usr_features(coords):
   return _compute_usr(x, y, z, w, cart_coords)
 
 
-def remove_duplicates(coords, energies, threshold=0.99, verbose=True):
+def remove_duplicates(coords, energies, threshold=0.995, verbose=True):
   """
   Remove duplicated structures. The similarity algorithm used here is USR.
 
@@ -860,7 +857,7 @@ if __name__ == "__main__":
   parser.add_argument(
     "-b", "--batch_size",
     type=int,
-    default=200,
+    default=5,
     help="The batch size."
   )
   parser.add_argument(
@@ -878,19 +875,19 @@ if __name__ == "__main__":
   parser.add_argument(
     "--log_frequency",
     type=int,
-    default=50,
+    default=1,
     help="The frequency to output minibatch errors."
   )
   parser.add_argument(
     "--eval_frequency",
     type=int,
-    default=500,
+    default=10,
     help="The frequency to output validation errors."
   )
   parser.add_argument(
     "--save_frequency",
     type=int,
-    default=2000,
+    default=100,
     help="The frequency to save the trained model."
   )
   parser.add_argument(
@@ -900,7 +897,5 @@ if __name__ == "__main__":
     help="The lambda for L2 loss of regularizers. Default to None."
   )
 
-  FLAGS = parser.parse_args([
-    "--log_frequency=10", "--eval_frequency=100", "--batch_size=500",
-    "--num_epochs=40"])
+  FLAGS = parser.parse_args([])
   tf.app.run(main)
