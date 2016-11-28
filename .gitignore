@@ -90,3 +90,6 @@ ENV/
 
 # PyCharm setting
 .idea/
+
+# HDF5
+*.hdf5
